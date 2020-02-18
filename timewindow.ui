@@ -111,6 +111,9 @@
     <property name="text">
      <string/>
     </property>
+    <property name="textInteractionFlags">
+     <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+    </property>
    </widget>
    <widget class="QLabel" name="CentralOutput">
     <property name="geometry">
@@ -123,6 +126,9 @@
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
     </property>
    </widget>
    <widget class="QComboBox" name="timeformat">
