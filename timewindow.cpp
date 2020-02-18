@@ -38,6 +38,9 @@ void TimeWindow::CalculateTime(){
     QRegExp reg("[0-9.]*");
     if(reg.exactMatch(butval)){
         ui->ErrorOutput->setText("");
+        //ui->HistoryList->
+        //ui->listWidget->insertItem(0,butval);
+        QString buttvalor = butval;
        if(butval.length()>13){
            butval = butval.left(13);
        }
@@ -52,7 +55,7 @@ void TimeWindow::CalculateTime(){
         }
 
        std::string buffer = timeStampToHReadble((time_t)sec,0);
-
+        ui->listWidget->insertItem(0,buttvalor+" UTC:"+QString::fromStdString(buffer)+ "    Local:"+QString::fromStdString(timeStampToHReadble((time_t)sec,1)));
         ui->utcOutput->setText(QString::fromStdString(buffer));
         ui->CentralOutput->setText(QString::fromStdString(timeStampToHReadble((time_t)sec,1)));
     }else{
