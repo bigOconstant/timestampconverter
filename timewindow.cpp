@@ -2,6 +2,7 @@
 #include "ui_timewindow.h"
 #include <time.h>       /* time_t, struct tm, difftime, time, mktime */
 #include <ctime>
+ #include <QDateTime>
 TimeWindow::TimeWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TimeWindow)
@@ -17,19 +18,6 @@ TimeWindow::~TimeWindow()
     delete ui;
 }
 
-std::string timeStampToHReadble(const time_t rawtime,int timezoneEnum)
-{
-    struct tm * dt;
-    char buffer [30];
-    //dt = localtime(&rawtime);
-    if(timezoneEnum == 0){
-        dt = gmtime(&rawtime);
-    }else{
-        dt = localtime(&rawtime);
-    }
-    strftime(buffer, sizeof(buffer), "%m-%d-%Y %I:%M:%S", dt);
-    return std::string(buffer);
-}
 
 
 void TimeWindow::CalculateTime(){
@@ -38,8 +26,6 @@ void TimeWindow::CalculateTime(){
     QRegExp reg("[0-9.]*");
     if(reg.exactMatch(butval)){
         ui->ErrorOutput->setText("");
-        //ui->HistoryList->
-        //ui->listWidget->insertItem(0,butval);
         QString buttvalor = butval;
        if(butval.length()>13){
            butval = butval.left(13);
@@ -53,11 +39,12 @@ void TimeWindow::CalculateTime(){
         }else{
             sec = timestamp;
         }
+        QDateTime qtimestamp = QDateTime::fromTime_t(sec);
 
-       std::string buffer = timeStampToHReadble((time_t)sec,0);
-        ui->listWidget->insertItem(0,buttvalor+" UTC:"+QString::fromStdString(buffer)+ "    Local:"+QString::fromStdString(timeStampToHReadble((time_t)sec,1)));
-        ui->utcOutput->setText(QString::fromStdString(buffer));
-        ui->CentralOutput->setText(QString::fromStdString(timeStampToHReadble((time_t)sec,1)));
+
+        ui->listWidget->insertItem(0,ui->timeformat->currentText()+" " +buttvalor+" UTC:"+qtimestamp.toUTC().toString()+ "    Local:"+qtimestamp.toString());
+        ui->utcOutput->setText(qtimestamp.toUTC().toString());
+        ui->CentralOutput->setText(qtimestamp.toString());
     }else{
         ui->ErrorOutput->setText("Error, Invalid");
     }
