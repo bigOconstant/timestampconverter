@@ -64,7 +64,7 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>170</y>
+      <y>100</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -77,7 +77,7 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>210</y>
+      <y>140</y>
       <width>41</width>
       <height>41</height>
      </rect>
@@ -103,7 +103,7 @@
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>170</y>
+      <y>100</y>
       <width>291</width>
       <height>31</height>
      </rect>
@@ -116,7 +116,7 @@
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>220</y>
+      <y>150</y>
       <width>331</width>
       <height>21</height>
      </rect>
@@ -124,6 +124,26 @@
     <property name="text">
      <string/>
     </property>
+   </widget>
+   <widget class="QComboBox" name="timeformat">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>100</y>
+      <width>131</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Milliseconds</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Seconds</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

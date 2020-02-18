@@ -8,6 +8,8 @@ TimeWindow::TimeWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->ConvertButton,SIGNAL(released()),this,SLOT(CalculateTime()));
+  //  alignLeftAction->setIcon(QIcon(":/icons/alignLeft.png"));
+
 }
 
 TimeWindow::~TimeWindow()
@@ -42,7 +44,12 @@ void TimeWindow::CalculateTime(){
 
 
        long timestamp = butval.toLong();
-       int sec = ((timestamp + 500) / 1000);
+       int sec;
+        if(ui->timeformat->currentText() == "Milliseconds"){
+            sec = ((timestamp + 500) / 1000);
+        }else{
+            sec = timestamp;
+        }
 
        std::string buffer = timeStampToHReadble((time_t)sec,0);
 
