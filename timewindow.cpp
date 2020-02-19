@@ -25,16 +25,14 @@ void TimeWindow::CalculateTime(){
 
     QRegExp reg("[0-9.]*");
     if(reg.exactMatch(butval)){
-        ui->ErrorOutput->setText("");
-        QString buttvalor = butval;
-       if(butval.length()>13){
-           butval = butval.left(13);
+       ui->ErrorOutput->setText("");
+
+       uint64_t timestamp = butval.toLong();
+       uint64_t sec;
+       if(ui->timeformat->currentText() == "Nanoseconds"){
+           sec = timestamp /  1000000000ULL;
        }
-
-
-       long timestamp = butval.toLong();
-       int sec;
-        if(ui->timeformat->currentText() == "Milliseconds"){
+        else if(ui->timeformat->currentText() == "Milliseconds"){
             sec = ((timestamp + 500) / 1000);
         }else{
             sec = timestamp;
@@ -42,7 +40,7 @@ void TimeWindow::CalculateTime(){
         QDateTime qtimestamp = QDateTime::fromTime_t(sec);
 
 
-        ui->listWidget->insertItem(0,ui->timeformat->currentText()+" " +buttvalor+" UTC:"+qtimestamp.toUTC().toString()+ "    Local:"+qtimestamp.toString());
+        ui->listWidget->insertItem(0,ui->timeformat->currentText()+" " +butval+" UTC:"+qtimestamp.toUTC().toString()+ "    Local:"+qtimestamp.toString());
         ui->utcOutput->setText(qtimestamp.toUTC().toString());
         ui->CentralOutput->setText(qtimestamp.toString());
     }else{
