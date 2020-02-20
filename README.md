@@ -7,6 +7,8 @@ Example time in nanoseconds `1581417272788691567`
 
 gives the output `Tue Feb 11 10:34:32 2020 GMT`
 
+[Download Mac release here](https://github.com/camccar/timestampconverter/releases)
+
 ![screenshot](https://raw.githubusercontent.com/camccar/timestampconverter/master/screenshot.png)
 
 
