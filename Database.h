@@ -41,7 +41,11 @@ public:
     Database(){
         db = QSqlDatabase::addDatabase("QSQLITE");
         QDir databasePath;
-        QString path = databasePath.currentPath()+"myDb.db";
+        QString Location = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        if(!QDir(Location).exists()){
+            QDir().mkdir(Location);
+        }
+        QString path = Location+"/timestampConverter.db";
         db.setDatabaseName(path);
         initDb();
 
