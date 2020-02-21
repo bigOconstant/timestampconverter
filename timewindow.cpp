@@ -3,12 +3,19 @@
 #include <time.h>       /* time_t, struct tm, difftime, time, mktime */
 #include <ctime>
  #include <QDateTime>
+
 TimeWindow::TimeWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TimeWindow)
 {
     ui->setupUi(this);
     connect(ui->ConvertButton,SIGNAL(released()),this,SLOT(CalculateTime()));
+     t = new Database();
+     auto historyvalues = t->getHistory();
+     for(auto it = historyvalues.begin(); it < historyvalues.end(); ++it){
+         ui->listWidget->insertItem(0,(*it));
+     }
+   // t->initDb();
   //  alignLeftAction->setIcon(QIcon(":/icons/alignLeft.png"));
 
 }
@@ -39,8 +46,9 @@ void TimeWindow::CalculateTime(){
         }
         QDateTime qtimestamp = QDateTime::fromTime_t(sec);
 
-
-        ui->listWidget->insertItem(0,ui->timeformat->currentText()+" " +butval+" UTC:"+qtimestamp.toUTC().toString()+ "    Local:"+qtimestamp.toString());
+        QString historyvalue = ui->timeformat->currentText()+" " +butval+" UTC:"+qtimestamp.toUTC().toString()+ "    Local:"+qtimestamp.toString();
+        ui->listWidget->insertItem(0,historyvalue);
+        t->insertRow(historyvalue);
         ui->utcOutput->setText(qtimestamp.toUTC().toString());
         ui->CentralOutput->setText(qtimestamp.toString());
     }else{

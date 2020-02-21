@@ -2,6 +2,7 @@
 #define TIMEWINDOW_H
 
 #include <QMainWindow>
+#include "Database.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class TimeWindow; }
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::TimeWindow *ui;
+    Database* t;
 
 private slots:
     void CalculateTime();
