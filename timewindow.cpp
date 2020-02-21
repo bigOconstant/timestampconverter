@@ -10,10 +10,18 @@ TimeWindow::TimeWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->ConvertButton,SIGNAL(released()),this,SLOT(CalculateTime()));
+
+    connect(ui->timeformat,SIGNAL(currentIndexChanged(const QString&)),this,SLOT(SetSecondText()));
+
      t = new Database();
      auto historyvalues = t->getHistory();
      for(auto it = historyvalues.begin(); it < historyvalues.end(); ++it){
          ui->listWidget->insertItem(0,(*it));
+     }
+     auto secondtype = t->getSecondType();
+     int index = ui->timeformat->findText(secondtype);
+     if(index != -1){
+         ui->timeformat->setCurrentIndex(index);
      }
 
 
@@ -23,7 +31,9 @@ TimeWindow::~TimeWindow()
 {
     delete ui;
 }
-
+void TimeWindow::SetSecondText(){
+    t->setSecondType(ui->timeformat->currentText());
+}
 
 
 void TimeWindow::CalculateTime(){

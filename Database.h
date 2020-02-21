@@ -20,6 +20,17 @@ private:
                 q.exec(QLatin1String(R"(create table history(id integer primary key, data varchar,secondtype varchar, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP))"));
         }
 
+        if(!tables.contains("settings", Qt::CaseInsensitive)){
+            QSqlQuery q;
+            q.exec(QLatin1String(R"(create table settings(id integer primary key, name varchar,value varchar))"));
+            q.prepare("INSERT INTO settings (name,value) "
+                             "VALUES (:name,:value)");
+            q.bindValue(":name","secondtype");
+            q.bindValue(":value","Nanoseconds");
+            q.exec();
+
+        }
+
 
     }
 
@@ -34,6 +45,22 @@ public:
         db.setDatabaseName(path);
         initDb();
 
+    }
+
+    QString getSecondType(){
+        QSqlQuery query;
+        QString output;
+        query.exec("SELECT value FROM settings where name = 'secondtype'");
+        while(query.next()){
+            output = query.value(0).toString();
+        }
+        return output;
+    }
+    void setSecondType(QString const & value){
+        QSqlQuery query;
+        query.prepare("update settings set value = :value where name = 'secondtype'");
+        query.bindValue(":value",value);
+        query.exec();
     }
     std::vector<QString> getHistory(){
         std::vector<QString> output;

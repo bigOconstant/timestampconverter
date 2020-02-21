@@ -22,5 +22,6 @@ private:
 
 private slots:
     void CalculateTime();
+    void SetSecondText();
 };
 #endif // TIMEWINDOW_H
