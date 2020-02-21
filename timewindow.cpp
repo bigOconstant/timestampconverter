@@ -2,7 +2,7 @@
 #include "ui_timewindow.h"
 #include <time.h>       /* time_t, struct tm, difftime, time, mktime */
 #include <ctime>
- #include <QDateTime>
+#include <QDateTime>
 
 TimeWindow::TimeWindow(QWidget *parent)
     : QMainWindow(parent)
