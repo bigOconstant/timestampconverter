@@ -17,7 +17,7 @@ private:
 
         if (!tables.contains("history", Qt::CaseInsensitive)){
                 QSqlQuery q;
-                q.exec(QLatin1String(R"(create table history(id integer primary key, data varchar, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP))"));
+                q.exec(QLatin1String(R"(create table history(id integer primary key, data varchar,secondtype varchar, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP))"));
         }
 
 
@@ -38,18 +38,48 @@ public:
     std::vector<QString> getHistory(){
         std::vector<QString> output;
         QSqlQuery query2;
-        query2.exec("SELECT data FROM history order by timestamp");
+        query2.exec("SELECT data,secondtype FROM history order by timestamp limit 100 ");
         while (query2.next()) {
-            output.push_back(query2.value(0).toString());
+            auto data = query2.value(0).toString();
+            auto second = query2.value(1).toString();
+
+            uint64_t timestamp = data.toLong();
+            uint64_t sec;
+            if(second == "Nanoseconds"){
+                sec = timestamp /  1000000000ULL;
+            }
+             else if(second == "Milliseconds"){
+                 sec = ((timestamp + 500) / 1000);
+             }else{
+                 sec = timestamp;
+             }
+             QDateTime qtimestamp = QDateTime::fromTime_t(sec);
+
+
+            QString historyvalue = second+" " +data+" UTC:"+qtimestamp.toUTC().toString()+ "    Local:"+qtimestamp.toString();
+
+            output.push_back(historyvalue);
         }
         return output;
     }
 
-    void insertRow(QString const &  input){
+    void insertRow(QString const &  number,QString const & secondtype){
        QSqlQuery query;
-       query.prepare("INSERT INTO history (data) "
-                        "VALUES (:data)");
-       query.bindValue(":data",input);
+
+       query.exec("select count(*) FROM history");
+       int count = 0;
+       while(query.next()){
+           count = query.value(0).toInt();
+       }
+
+       if (count >100){ // Only allow 100 rows so it doesn't grow to infinity.
+           query.exec("DELETE FROM history WHERE id IN (SELECT id FROM history ORDER BY timestamp DESC LIMIT -1 OFFSET 3)");
+       }
+
+       query.prepare("INSERT INTO history (data,secondtype) "
+                        "VALUES (:data,:secondtype)");
+       query.bindValue(":data",number);
+       query.bindValue(":secondtype",secondtype);
        query.exec();
 
     }

@@ -15,8 +15,7 @@ TimeWindow::TimeWindow(QWidget *parent)
      for(auto it = historyvalues.begin(); it < historyvalues.end(); ++it){
          ui->listWidget->insertItem(0,(*it));
      }
-   // t->initDb();
-  //  alignLeftAction->setIcon(QIcon(":/icons/alignLeft.png"));
+
 
 }
 
@@ -48,7 +47,8 @@ void TimeWindow::CalculateTime(){
 
         QString historyvalue = ui->timeformat->currentText()+" " +butval+" UTC:"+qtimestamp.toUTC().toString()+ "    Local:"+qtimestamp.toString();
         ui->listWidget->insertItem(0,historyvalue);
-        t->insertRow(historyvalue);
+
+        t->insertRow(butval,ui->timeformat->currentText());
         ui->utcOutput->setText(qtimestamp.toUTC().toString());
         ui->CentralOutput->setText(qtimestamp.toString());
     }else{
