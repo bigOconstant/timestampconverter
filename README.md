@@ -1,4 +1,4 @@
-# timestampconverter
+# Timestampconverter
 QT Tool to convert unix times to human readable times for bug fixing. 
 
 Especially useful for monitoring Influxdb logs
