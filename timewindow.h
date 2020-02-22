@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "Database.h"
-
+#include "about.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class TimeWindow; }
 QT_END_NAMESPACE
@@ -17,13 +17,17 @@ public:
     ~TimeWindow();
     bool eventFilter(QObject *object, QEvent *event);
 
+
+
 private:
     Ui::TimeWindow *ui;
     Database* t;
+    About *wdg;
 
 private slots:
     void CalculateTime(bool inside = 0);
     void SetSecondText();
     void RetrieveHistoryItem(QListWidgetItem*);
+    void OpenAbout();
 };
 #endif // TIMEWINDOW_H

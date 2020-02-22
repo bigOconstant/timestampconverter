@@ -5,18 +5,21 @@
 #include <QDateTime>
 #include <QListWidgetItem>
 #include <QKeyEvent>
-
+#include "about.h"
 TimeWindow::TimeWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TimeWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("Unix Time Stamp Converter");
     connect(ui->ConvertButton,SIGNAL(released()),this,SLOT(CalculateTime()));
 
     connect(ui->timeformat,SIGNAL(currentIndexChanged(const QString&)),this,SLOT(SetSecondText()));
 
     connect(ui->listWidget , SIGNAL(itemClicked(QListWidgetItem*)),
                 this, SLOT(RetrieveHistoryItem(QListWidgetItem*)));
+
+    connect(ui->toolButton,SIGNAL(released()),this,SLOT(OpenAbout()));
 
      ui->listWidget->installEventFilter(this);
 
@@ -35,6 +38,8 @@ TimeWindow::TimeWindow(QWidget *parent)
      if(index != -1){
          ui->timeformat->setCurrentIndex(index);
      }
+     wdg = new About();
+
 
 
 }
@@ -42,6 +47,12 @@ TimeWindow::TimeWindow(QWidget *parent)
 TimeWindow::~TimeWindow()
 {
     delete ui;
+    delete wdg;
+    delete t;
+}
+
+void TimeWindow::OpenAbout(){
+   wdg->show();
 }
 
 bool TimeWindow::eventFilter(QObject *object, QEvent *event)
@@ -73,6 +84,7 @@ bool TimeWindow::eventFilter(QObject *object, QEvent *event)
                 CalculateTime(true);
 
             }
+
             return true;
         }else{
             return false;
