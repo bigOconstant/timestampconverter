@@ -58,8 +58,25 @@ bool TimeWindow::eventFilter(QObject *object, QEvent *event)
                 delete ui->listWidget->takeItem(ui->listWidget->row(item));
             }
             return true;
-        } else
+        } else if(keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter ){
+            auto items = ui->listWidget->selectedItems();
+            foreach(QListWidgetItem * item, items)
+            {
+                auto id = item->data(Qt::UserRole).toString();
+                auto historyrecord = t->getHistoryItem(id);
+                ui->TimeStampInput->setText(historyrecord.first);
+                int index = ui->timeformat->findText(historyrecord.second);
+                if(index != -1){
+                    ui->timeformat->setCurrentIndex(index);
+                }
+
+                CalculateTime(true);
+
+            }
+            return true;
+        }else{
             return false;
+        }
     }
     return false;
 }
