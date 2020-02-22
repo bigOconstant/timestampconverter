@@ -23,4 +23,8 @@ command I use `/Users/caleb/Qt/5.12.7/clang_64/bin/macdeployqt /build-releasedir
 
 On mac it's in `~/Library/Application Support/timeStampConverter`
 
+## How could I contribute?
+
+I could use someone to make windows and linux builds. 
+
 
