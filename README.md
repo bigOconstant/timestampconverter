@@ -11,6 +11,9 @@ History is stored in a local sqlite db file.
 
 Only the last 100 records persist in the database so that the database doesn't grow forever. 
 
+### How do I delete history records?
+The backspace or delete key will delete the selected record
+
 
 ## Where do I get a build?
 
