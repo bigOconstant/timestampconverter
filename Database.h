@@ -109,6 +109,14 @@ public:
 
     }
 
+    void deleteHistoryItem(QString id){
+        QSqlQuery query;
+        query.prepare("delete from history where id = :id");
+        query.bindValue(":id",id);
+        query.exec();
+        return;
+    }
+
     QString insertRow(QString const &  number,QString const & secondtype){
        QSqlQuery query;
 

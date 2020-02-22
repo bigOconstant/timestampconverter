@@ -53,6 +53,8 @@ bool TimeWindow::eventFilter(QObject *object, QEvent *event)
             auto items = ui->listWidget->selectedItems();
             foreach(QListWidgetItem * item, items)
             {
+                auto id = item->data(Qt::UserRole).toString();
+                t->deleteHistoryItem(id);
                 delete ui->listWidget->takeItem(ui->listWidget->row(item));
             }
             return true;
