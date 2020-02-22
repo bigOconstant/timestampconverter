@@ -100,6 +100,12 @@ void TimeWindow::RetrieveHistoryItem(QListWidgetItem* input){
 
 void TimeWindow::CalculateTime(bool inside){
     QString butval = ui->TimeStampInput->toPlainText();
+    butval = butval.trimmed();
+    ui->TimeStampInput->setPlainText(butval);
+    if(butval == ""){
+        ui->ErrorOutput->setText("Error, Invalid time stamp");
+        return;
+    }
 
     QRegExp reg("[0-9.]*");
     if(reg.exactMatch(butval)){
@@ -130,7 +136,7 @@ void TimeWindow::CalculateTime(bool inside){
         ui->utcOutput->setText(qtimestamp.toUTC().toString());
         ui->CentralOutput->setText(qtimestamp.toString());
     }else{
-        ui->ErrorOutput->setText("Error, Invalid");
+        ui->ErrorOutput->setText("Error, Invalid time stamp");
     }
 
 }
