@@ -1,4 +1,4 @@
-# timestampconverter
+# Timestampconverter
 QT Tool to convert unix times to human readable times for bug fixing. 
 
 Especially useful for monitoring Influxdb logs
@@ -6,6 +6,13 @@ Especially useful for monitoring Influxdb logs
 Example time in nanoseconds `1581417272788691567`
 
 gives the output `Tue Feb 11 10:34:32 2020 GMT`
+
+History is stored in a local sqlite db file.
+
+Only the last 100 records persist in the database so that the database doesn't grow forever. 
+
+
+## Where do I get a build?
 
 [Download Mac release here](https://github.com/camccar/timestampconverter/releases)
 
@@ -15,8 +22,12 @@ gives the output `Tue Feb 11 10:34:32 2020 GMT`
 
 command I use `/Users/caleb/Qt/5.12.7/clang_64/bin/macdeployqt /build-releasedir/timeStampConverter.app -dmg`
 
-### Where is the database store?
+### Where is the database stored?
 
-on mac it's in `~/Library/Application Support/timeStampConverter`
+On mac it's in `~/Library/Application Support/timeStampConverter`
+
+## How could I contribute?
+
+I could use someone to make windows and linux builds. 
 
 
