@@ -9,6 +9,8 @@ gives the output `Tue Feb 11 10:34:32 2020 GMT`
 
 History is stored in a local sqlite db file.
 
+## Where do I get a build?
+
 [Download Mac release here](https://github.com/camccar/timestampconverter/releases)
 
 ![screenshot](https://raw.githubusercontent.com/camccar/timestampconverter/master/screenshot.png)
