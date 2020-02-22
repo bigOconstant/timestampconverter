@@ -15,6 +15,7 @@ class TimeWindow : public QMainWindow
 public:
     TimeWindow(QWidget *parent = nullptr);
     ~TimeWindow();
+    bool eventFilter(QObject *object, QEvent *event);
 
 private:
     Ui::TimeWindow *ui;

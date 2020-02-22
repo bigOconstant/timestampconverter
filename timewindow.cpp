@@ -4,6 +4,7 @@
 #include <ctime>
 #include <QDateTime>
 #include <QListWidgetItem>
+#include <QKeyEvent>
 
 TimeWindow::TimeWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,6 +17,10 @@ TimeWindow::TimeWindow(QWidget *parent)
 
     connect(ui->listWidget , SIGNAL(itemClicked(QListWidgetItem*)),
                 this, SLOT(RetrieveHistoryItem(QListWidgetItem*)));
+
+     ui->listWidget->installEventFilter(this);
+
+    //ui->listWidget->event()
      t = new Database();
      auto historyvalues = t->getHistory();
      for(auto it = historyvalues.begin(); it < historyvalues.end(); ++it){
@@ -38,6 +43,26 @@ TimeWindow::~TimeWindow()
 {
     delete ui;
 }
+
+bool TimeWindow::eventFilter(QObject *object, QEvent *event)
+{
+    if (object == ui->listWidget && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Delete ||keyEvent->key() == Qt::Key_Backspace ) {
+            // Special tab handling
+            auto items = ui->listWidget->selectedItems();
+            foreach(QListWidgetItem * item, items)
+            {
+                delete ui->listWidget->takeItem(ui->listWidget->row(item));
+            }
+            return true;
+        } else
+            return false;
+    }
+    return false;
+}
+
+
 void TimeWindow::SetSecondText(){
     t->setSecondType(ui->timeformat->currentText());
 }
