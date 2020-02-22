@@ -3,6 +3,7 @@
 #include <time.h>       /* time_t, struct tm, difftime, time, mktime */
 #include <ctime>
 #include <QDateTime>
+#include <QListWidgetItem>
 
 TimeWindow::TimeWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,10 +14,16 @@ TimeWindow::TimeWindow(QWidget *parent)
 
     connect(ui->timeformat,SIGNAL(currentIndexChanged(const QString&)),this,SLOT(SetSecondText()));
 
+    connect(ui->listWidget , SIGNAL(itemClicked(QListWidgetItem*)),
+                this, SLOT(RetrieveHistoryItem(QListWidgetItem*)));
      t = new Database();
      auto historyvalues = t->getHistory();
      for(auto it = historyvalues.begin(); it < historyvalues.end(); ++it){
-         ui->listWidget->insertItem(0,(*it));
+         QListWidgetItem* item = new QListWidgetItem();
+         item->setData(Qt::UserRole,(*it).second);
+         item->setText((*it).first);
+
+         ui->listWidget->insertItem(0,item);
      }
      auto secondtype = t->getSecondType();
      int index = ui->timeformat->findText(secondtype);
@@ -34,9 +41,20 @@ TimeWindow::~TimeWindow()
 void TimeWindow::SetSecondText(){
     t->setSecondType(ui->timeformat->currentText());
 }
+void TimeWindow::RetrieveHistoryItem(QListWidgetItem* input){
+    QString id = input->data(Qt::UserRole).toString();
+    std::pair<QString,QString> historyitem = t->getHistoryItem(id);
+    ui->TimeStampInput->setText(historyitem.first);
+    int index = ui->timeformat->findText(historyitem.second);
+    if(index != -1){
+        ui->timeformat->setCurrentIndex(index);
+    }
+    CalculateTime(true);
+
+}
 
 
-void TimeWindow::CalculateTime(){
+void TimeWindow::CalculateTime(bool inside){
     QString butval = ui->TimeStampInput->toPlainText();
 
     QRegExp reg("[0-9.]*");
@@ -56,9 +74,15 @@ void TimeWindow::CalculateTime(){
         QDateTime qtimestamp = QDateTime::fromTime_t(sec);
 
         QString historyvalue = ui->timeformat->currentText()+" " +butval+" UTC:"+qtimestamp.toUTC().toString()+ "    Local:"+qtimestamp.toString();
-        ui->listWidget->insertItem(0,historyvalue);
 
-        t->insertRow(butval,ui->timeformat->currentText());
+        if(!inside){
+
+           QString id = t->insertRow(butval,ui->timeformat->currentText());
+           QListWidgetItem* hv = new QListWidgetItem();
+           hv->setData(Qt::UserRole,id);
+           hv->setText(historyvalue);
+           ui->listWidget->insertItem(0,hv);
+        }
         ui->utcOutput->setText(qtimestamp.toUTC().toString());
         ui->CentralOutput->setText(qtimestamp.toString());
     }else{

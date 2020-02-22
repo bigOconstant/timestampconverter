@@ -21,7 +21,8 @@ private:
     Database* t;
 
 private slots:
-    void CalculateTime();
+    void CalculateTime(bool inside = 0);
     void SetSecondText();
+    void RetrieveHistoryItem(QListWidgetItem*);
 };
 #endif // TIMEWINDOW_H

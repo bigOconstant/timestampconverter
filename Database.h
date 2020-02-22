@@ -7,6 +7,7 @@
 #include <QtSql>
 #include <iostream>
 #include <vector>
+#include <QListWidgetItem>
 class Database{
 private:
     QSqlDatabase db;
@@ -66,13 +67,14 @@ public:
         query.bindValue(":value",value);
         query.exec();
     }
-    std::vector<QString> getHistory(){
-        std::vector<QString> output;
+    std::vector<std::pair<QString,QString>> getHistory(){
+        std::vector<std::pair<QString,QString>> output;
         QSqlQuery query2;
-        query2.exec("SELECT data,secondtype FROM history order by timestamp limit 100 ");
+        query2.exec("SELECT id, data,secondtype FROM history order by timestamp limit 100 ");
         while (query2.next()) {
-            auto data = query2.value(0).toString();
-            auto second = query2.value(1).toString();
+            auto id = query2.value(0).toString();
+            auto data = query2.value(1).toString();
+            auto second = query2.value(2).toString();
 
             uint64_t timestamp = data.toLong();
             uint64_t sec;
@@ -89,12 +91,25 @@ public:
 
             QString historyvalue = second+" " +data+" UTC:"+qtimestamp.toUTC().toString()+ "    Local:"+qtimestamp.toString();
 
-            output.push_back(historyvalue);
+            output.push_back({historyvalue,id});
         }
         return output;
     }
+    std::pair<QString,QString> getHistoryItem(QString id){
+        std::pair<QString,QString> retVal = {"",""};
+        QSqlQuery query;
+        query.prepare("select data,secondtype from history where id = :id");
+        query.bindValue(":id",id);
+        query.exec();
+        while(query.next()){
+            retVal.first = query.value(0).toString();
+            retVal.second = query.value(1).toString();
+        }
+        return retVal;
 
-    void insertRow(QString const &  number,QString const & secondtype){
+    }
+
+    QString insertRow(QString const &  number,QString const & secondtype){
        QSqlQuery query;
 
        query.exec("select count(*) FROM history");
@@ -112,6 +127,14 @@ public:
        query.bindValue(":data",number);
        query.bindValue(":secondtype",secondtype);
        query.exec();
+
+       //SELECT last_insert_rowid()
+       query.exec("select last_insert_rowid()");
+       QString retVal;
+       while (query.next()){
+           retVal = query.value(0).toString();
+       }
+      return retVal;
 
     }
 
