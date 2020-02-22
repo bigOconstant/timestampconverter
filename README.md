@@ -14,6 +14,9 @@ Only the last 100 records persist in the database so that the database doesn't g
 ### How do I delete history records?
 The backspace or delete key will delete the selected record
 
+### Other keypresses
+Enter or return on a historical record will load it into the main ui just like clicking a record will
+
 
 ## Where do I get a build?
 
@@ -28,6 +31,9 @@ command I use `/Users/caleb/Qt/5.12.7/clang_64/bin/macdeployqt /build-releasedir
 ### Where is the database stored?
 
 On mac it's in `~/Library/Application Support/timeStampConverter`
+
+### How do I remove the database
+on a mac terminal `rm -rf ~/Library/Application\ Support/timeStampConverter`
 
 ## How could I contribute?
 
