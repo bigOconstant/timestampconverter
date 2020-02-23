@@ -1,9 +1,5 @@
-#ifndef DATABASE_H
-#define DATABASE_H
 
-#endif // DATABASE_H
 
-#include <sqlite3.h>
 #include <QtSql>
 #include <iostream>
 #include <vector>
@@ -127,7 +123,7 @@ public:
        }
 
        if (count >100){ // Only allow 100 rows so it doesn't grow to infinity.
-           query.exec("DELETE FROM history WHERE id IN (SELECT id FROM history ORDER BY timestamp DESC LIMIT -1 OFFSET 3)");
+           query.exec("DELETE FROM history WHERE id IN (SELECT id FROM history ORDER BY timestamp DESC LIMIT -1 OFFSET 100)");
        }
 
        query.prepare("INSERT INTO history (data,secondtype) "
