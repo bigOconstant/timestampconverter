@@ -29,5 +29,6 @@ private slots:
     void SetSecondText();
     void RetrieveHistoryItem(QListWidgetItem*);
     void OpenAbout();
+    void setCurrentTime();
 };
 #endif // TIMEWINDOW_H

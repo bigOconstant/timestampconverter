@@ -20,6 +20,7 @@ TimeWindow::TimeWindow(QWidget *parent)
                 this, SLOT(RetrieveHistoryItem(QListWidgetItem*)));
 
     connect(ui->toolButton,SIGNAL(released()),this,SLOT(OpenAbout()));
+    connect(ui->DisplayCurrentTime,SIGNAL(released()),this,SLOT(setCurrentTime()));
 
      ui->listWidget->installEventFilter(this);
 
@@ -53,6 +54,15 @@ TimeWindow::~TimeWindow()
 
 void TimeWindow::OpenAbout(){
    wdg->show();
+}
+void TimeWindow::setCurrentTime(){
+    auto seconds = QDateTime::currentSecsSinceEpoch();
+    int index = ui->timeformat->findText("Seconds");
+    if(index != -1){
+        ui->timeformat->setCurrentIndex(index);
+    }
+    ui->TimeStampInput->setText(QString::number(seconds));
+    CalculateTime();
 }
 
 bool TimeWindow::eventFilter(QObject *object, QEvent *event)
@@ -123,8 +133,8 @@ void TimeWindow::CalculateTime(bool inside){
     if(reg.exactMatch(butval)){
        ui->ErrorOutput->setText("");
 
-       uint64_t timestamp = butval.toLong();
-       uint64_t sec;
+       long long timestamp = butval.toLong();
+       long long sec;
        if(ui->timeformat->currentText() == "Nanoseconds"){
            sec = timestamp /  1000000000ULL;
        }

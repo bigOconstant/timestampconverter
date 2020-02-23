@@ -76,8 +76,8 @@ public:
             auto data = query2.value(1).toString();
             auto second = query2.value(2).toString();
 
-            uint64_t timestamp = data.toLong();
-            uint64_t sec;
+            long long timestamp = data.toLong();
+            long long sec;
             if(second == "Nanoseconds"){
                 sec = timestamp /  1000000000ULL;
             }
