@@ -17,6 +17,8 @@ The backspace or delete key will delete the selected record
 ### Other keypresses
 Enter or return on a historical record will load it into the main ui just like clicking a record will
 
+### What is the maximum time?
+around the year 2100
 
 ## Where do I get a build?
 
