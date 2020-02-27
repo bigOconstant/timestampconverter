@@ -10,6 +10,7 @@ TimeWindow::TimeWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TimeWindow)
 {
+    startTimer(1000);
     ui->setupUi(this);
     setWindowTitle("Unix Time Stamp Converter");
     connect(ui->ConvertButton,SIGNAL(released()),this,SLOT(CalculateTime()));
@@ -41,7 +42,7 @@ TimeWindow::TimeWindow(QWidget *parent)
      }
      wdg = new About();
 
-
+    ui->currentstamp->setText(QTime::currentTime().toString("hh:mm:ss"));
 
 }
 
@@ -50,6 +51,11 @@ TimeWindow::~TimeWindow()
     delete ui;
     delete wdg;
     delete t;
+}
+
+void TimeWindow::timerEvent(QTimerEvent * event){
+    QTime UtcTime  = QDateTime::currentDateTime ().toTimeSpec(Qt::UTC).time();
+    ui->currentstamp->setText("Local Time " +QTime::currentTime().toString("hh:mm:ss") + " "+" UTC "+UtcTime.toString() + " Timestamp " +QString::number(QDateTime::currentSecsSinceEpoch()));
 }
 
 void TimeWindow::OpenAbout(){

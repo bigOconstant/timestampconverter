@@ -16,7 +16,8 @@ public:
     TimeWindow(QWidget *parent = nullptr);
     ~TimeWindow();
     bool eventFilter(QObject *object, QEvent *event);
-
+protected:
+    void timerEvent(QTimerEvent *event);
 
 
 private:
