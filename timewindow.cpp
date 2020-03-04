@@ -6,6 +6,7 @@
 #include <QListWidgetItem>
 #include <QKeyEvent>
 #include "about.h"
+#include <chrono>
 TimeWindow::TimeWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TimeWindow)
@@ -54,20 +55,58 @@ TimeWindow::~TimeWindow()
 }
 
 void TimeWindow::timerEvent(QTimerEvent * event){
+
+    std::chrono::time_point<std::chrono::system_clock> timestamp =
+        std::chrono::system_clock::now();
+
+        //QString::number(QDateTime::currentSecsSinceEpoch()
+
+      auto timeStampString = QString();
+
+      if(ui->timeformat->currentText() == "Nanoseconds"){
+          const auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>
+            (timestamp.time_since_epoch()).count();
+          timeStampString = QString::number(ns);
+      }
+       else if(ui->timeformat->currentText() == "Milliseconds"){
+          const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>
+            (timestamp.time_since_epoch()).count();
+           timeStampString = QString::number(ms);
+       }else{
+          const auto ss = std::chrono::duration_cast<std::chrono::seconds>
+            (timestamp.time_since_epoch()).count();
+           timeStampString = QString::number(ss);
+       }
+
+
     QTime UtcTime  = QDateTime::currentDateTime ().toTimeSpec(Qt::UTC).time();
-    ui->currentstamp->setText("Local Time " +QTime::currentTime().toString("hh:mm:ss") + " "+" UTC "+UtcTime.toString() + " Timestamp " +QString::number(QDateTime::currentSecsSinceEpoch()));
+    ui->currentstamp->setText("Local Time " +QTime::currentTime().toString("hh:mm:ss") + " "+" UTC "+UtcTime.toString() + " Timestamp " +timeStampString);
+
 }
 
 void TimeWindow::OpenAbout(){
    wdg->show();
 }
 void TimeWindow::setCurrentTime(){
-    auto seconds = QDateTime::currentSecsSinceEpoch();
-    int index = ui->timeformat->findText("Seconds");
-    if(index != -1){
-        ui->timeformat->setCurrentIndex(index);
-    }
-    ui->TimeStampInput->setText(QString::number(seconds));
+
+    std::chrono::time_point<std::chrono::system_clock> timestamp =
+        std::chrono::system_clock::now();
+
+      if(ui->timeformat->currentText() == "Nanoseconds"){
+          const auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>
+            (timestamp.time_since_epoch()).count();
+          ui->TimeStampInput->setText(QString::number(ns));
+      }
+       else if(ui->timeformat->currentText() == "Milliseconds"){
+          const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>
+            (timestamp.time_since_epoch()).count();
+           ui->TimeStampInput->setText(QString::number(ms));
+       }else{
+          const auto ss = std::chrono::duration_cast<std::chrono::seconds>
+            (timestamp.time_since_epoch()).count();
+           ui->TimeStampInput->setText(QString::number(ss));
+       }
+
     CalculateTime();
 }
 
@@ -126,7 +165,7 @@ void TimeWindow::RetrieveHistoryItem(QListWidgetItem* input){
 }
 
 
-void TimeWindow::CalculateTime(bool inside){
+void TimeWindow::CalculateTime(bool inside) {
     QString butval = ui->TimeStampInput->toPlainText();
     butval = butval.trimmed();
     ui->TimeStampInput->setPlainText(butval);
